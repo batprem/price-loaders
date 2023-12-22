@@ -6,7 +6,7 @@ authors = ["prem <prem.ch@ku.th>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.10"
 requests = "^2.31.0"
 pandas = "^2.1.4"
 pytz = "^2023.3.post1"
