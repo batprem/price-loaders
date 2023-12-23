@@ -399,8 +399,8 @@ def aggregate_to_dataframe(
         lambda timestamp: datetime.datetime.fromtimestamp(
             timestamp, tz=timezone
         )
-    ).dropna(subset=["open", "high", "low", "close"])
-    return ohlcv
+    )
+    return ohlcv.dropna(subset=["open", "high", "low", "close"])
 
 
 def load_asset_price(

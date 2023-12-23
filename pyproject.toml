@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "price-loaders"
-version = "0.1.1"
+version = "0.1.2"
 description = "A Python module that can you scrape data from Tradingview and YahooFinance"
 authors = ["prem <prem.ch@ku.th>"]
 license = "MIT"
