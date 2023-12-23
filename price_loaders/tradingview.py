@@ -206,8 +206,6 @@ def request_data(
     websocket_session,
     chart_session,
 ):
-
-    time_frame = "1D"
     # look_back_bars = 365 * 10
 
     resolve_symbol = json.dumps({"symbol": symbol, "adjustment": "splits"})
