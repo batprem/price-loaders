@@ -229,6 +229,7 @@ def request_data(
     send_message(
         ws, "resolve_symbol", [chart_session, "symbol_1", f"={resolve_symbol}"]
     )
+    logging.debug(f"Time frame {time_frame}")
     send_message(
         ws,
         "create_series",
@@ -387,6 +388,7 @@ def aggregate_to_dataframe(
     if timezone is None:
         timezone = pytz.timezone("Asia/Bangkok")
     ohlcv = extract_price(chart)
+    logging.debug(ohlcv)
     pe_ratio = extract_pe_ratio(chart)
     if pe_ratio is not None:
         ohlcv = pd.concat(
@@ -397,7 +399,7 @@ def aggregate_to_dataframe(
         lambda timestamp: datetime.datetime.fromtimestamp(
             timestamp, tz=timezone
         )
-    )
+    ).dropna(subset=["open", "high", "low", "close"])
     return ohlcv
 
 
