@@ -12,6 +12,7 @@ from typing import List, Iterator, Literal
 import requests
 
 import pandas as pd
+import numpy as np
 from typing import Optional
 import datetime
 import pytz
@@ -400,7 +401,9 @@ def aggregate_to_dataframe(
             timestamp, tz=timezone
         )
     )
-    return ohlcv.dropna(subset=["open", "high", "low", "close"])
+    return ohlcv.dropna(
+        subset=["open", "high", "low", "close"]
+    ).astype(np.float64)
 
 
 def load_asset_price(
