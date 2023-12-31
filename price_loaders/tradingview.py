@@ -342,7 +342,9 @@ def extract_price(chart: dict) -> pd.DataFrame:
     Returns:
         pd.DataFrame: Result dataframe
     """
-    return pd.DataFrame([st["v"] for st in chart["price"]["s"]],).rename(
+    return pd.DataFrame(
+        [st["v"] for st in chart["price"]["s"]],
+    ).rename(
         columns={
             0: "time",
             1: "open",
@@ -401,9 +403,11 @@ def aggregate_to_dataframe(
             timestamp, tz=timezone
         )
     )
-    return ohlcv.dropna(
-        subset=["open", "high", "low", "close"]
-    ).astype(np.float64)
+    ohlcv = ohlcv.dropna(subset=["open", "high", "low", "close"])
+    ohlcv[["open", "high", "low", "close"]] = ohlcv[
+        ["open", "high", "low", "close"]
+    ].astype(np.float64)
+    return ohlcv
 
 
 def load_asset_price(
