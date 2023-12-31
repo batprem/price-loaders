@@ -12,6 +12,7 @@ from typing import List, Iterator, Literal
 import requests
 
 import pandas as pd
+import numpy as np
 from typing import Optional
 import datetime
 import pytz
@@ -341,7 +342,9 @@ def extract_price(chart: dict) -> pd.DataFrame:
     Returns:
         pd.DataFrame: Result dataframe
     """
-    return pd.DataFrame([st["v"] for st in chart["price"]["s"]],).rename(
+    return pd.DataFrame(
+        [st["v"] for st in chart["price"]["s"]],
+    ).rename(
         columns={
             0: "time",
             1: "open",
@@ -366,10 +369,12 @@ def extract_pe_ratio(chart: dict) -> Optional[pd.DataFrame]:
     """
     if "pe_ratio" not in chart:
         return None
-    return pd.DataFrame(
+    df = pd.DataFrame(
         [st["v"] for st in chart["pe_ratio"]["st"]],
         columns=["time", "pe_ratio"],
     )
+    df["pe_ratio"] = df["pe_ratio"].astype(np.float64)
+    return df
 
 
 def aggregate_to_dataframe(
@@ -400,7 +405,11 @@ def aggregate_to_dataframe(
             timestamp, tz=timezone
         )
     )
-    return ohlcv.dropna(subset=["open", "high", "low", "close"])
+    ohlcv = ohlcv.dropna(subset=["open", "high", "low", "close"])
+    ohlcv[["open", "high", "low", "close"]] = ohlcv[
+        ["open", "high", "low", "close"]
+    ].astype(np.float64)
+    return ohlcv
 
 
 def load_asset_price(
