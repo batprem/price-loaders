@@ -369,10 +369,12 @@ def extract_pe_ratio(chart: dict) -> Optional[pd.DataFrame]:
     """
     if "pe_ratio" not in chart:
         return None
-    return pd.DataFrame(
+    df = pd.DataFrame(
         [st["v"] for st in chart["pe_ratio"]["st"]],
         columns=["time", "pe_ratio"],
     )
+    df["pe_ratio"] = df["pe_ratio"].astype(np.float64)
+    return df
 
 
 def aggregate_to_dataframe(
