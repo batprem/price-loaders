@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "price-loaders"
+version = "0.1.4"
+description = "A Python module that can you scrape data from Tradingview and YahooFinance"
+authors = ["prem <prem.ch@ku.th>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+requests = "^2.31.0"
+pandas = "^2.1.4"
+pytz = "^2023.3.post1"
+
+
+[tool.poetry.dev-dependencies]
+jupyter = "^1.0.0"
+pre-commit = "^3.6.0"
+black = "^23.12.0"
+flake9 = "^3.8.3"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
