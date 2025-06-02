@@ -1,6 +1,6 @@
 [project]
 name = "price-loaders"
-version = "0.1.0"
+version = "0.2.0"
 description = "Add your description here"
 readme = "README.md"
 authors = [
@@ -17,3 +17,6 @@ dependencies = [
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[project.scripts]
+get-kbank = "price_loaders.tradingview:get_kbank"

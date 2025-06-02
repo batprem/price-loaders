@@ -434,6 +434,10 @@ def load_asset_price(
     return aggregate_to_dataframe(chart, timezone)
 
 
-if __name__ == "__main__":
+def get_kbank():
     df = load_asset_price("SET:KBANK", 365, "1D")
     print(df)
+
+
+if __name__ == "__main__":
+    get_kbank
