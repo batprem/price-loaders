@@ -89,7 +89,7 @@ def prepend_header(sentences: str) -> str:
     return f"~m~{len(sentences)}~m~{sentences}"
 
 
-def construct_message(function_name: str, parameters: List[str]) -> str:
+def construct_message(function_name: str, parameters: List[str | int | dict]) -> str:
     """
     Args:
         function_name
@@ -108,13 +108,13 @@ def construct_message(function_name: str, parameters: List[str]) -> str:
         elif isinstance(parameter, dict):
             transformed_params.append(json.dumps(parameter).replace("/", ""))
         else:
-            transformed_params.append(parameter)
+            transformed_params.append(parameter)  # type: ignore
     return json.dumps(
         {"m": function_name, "p": transformed_params}, separators=(",", ":")
     )  # .replace('"(', '{').replace('}"', '}')
 
 
-def create_message(function_name: str, parameters: List[str]) -> str:
+def create_message(function_name: str, parameters: List[str | int | dict]) -> str:
     """
     Description:
         Integration of a created message function
@@ -133,7 +133,7 @@ def create_message(function_name: str, parameters: List[str]) -> str:
 
 
 def send_message(
-    ws: websocket._core.WebSocket, func: str, args: List[str]
+    ws: websocket._core.WebSocket, func: str, args: List[str | int | dict]
 ) -> None:
     """
     Description:
@@ -224,7 +224,7 @@ def request_data(
     send_message(
         ws,
         "quote_add_symbols",
-        [websocket_session, symbol, {"flags": ["force_permission"]}],
+        [websocket_session, symbol, json.dumps({"flags": ["force_permission"]})],
     )
 
     send_message(
@@ -330,7 +330,7 @@ def load_raw_data(
             chart = {**chart, **data}
         if "pe_ratio" in chart:
             break
-    return chart
+    return chart  # type: ignore
 
 
 def extract_price(chart: dict) -> pd.DataFrame:
@@ -371,14 +371,14 @@ def extract_pe_ratio(chart: dict) -> Optional[pd.DataFrame]:
         return None
     df = pd.DataFrame(
         [st["v"] for st in chart["pe_ratio"]["st"]],
-        columns=["time", "pe_ratio"],
+        columns=["time", "pe_ratio"],  # type: ignore
     )
     df["pe_ratio"] = df["pe_ratio"].astype(np.float64)
     return df
 
 
 def aggregate_to_dataframe(
-    chart: dict, timezone: Optional[pytz.timezone] = None
+    chart: dict, timezone: Optional[pytz.BaseTzInfo] = None
 ) -> pd.DataFrame:
     """Aggregate raw chart data in a Pandas dataframe.
 
@@ -400,7 +400,7 @@ def aggregate_to_dataframe(
             [ohlcv.set_index("time"), pe_ratio.set_index("time")], axis=1
         ).reset_index()
 
-    ohlcv.time = ohlcv.time.apply(
+    ohlcv.time = ohlcv.time.apply(  # type: ignore
         lambda timestamp: datetime.datetime.fromtimestamp(
             timestamp, tz=timezone
         )
@@ -416,7 +416,7 @@ def load_asset_price(
     symbol: str,
     look_back_bars: int,
     time_frame: AvailableTimeFrame,
-    timezone: Optional[pytz.timezone] = None,
+    timezone: Optional[pytz.BaseTzInfo] = None,
 ) -> pd.DataFrame:
     """Run full process to scrape TradingView data
 
